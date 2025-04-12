@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Hind+Madurai:wght@300;400;500;600;700&family=Poppins:ital,wght@0,400;1,900&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Share+Tech&display=swap');
+        body {
+            background: linear-gradient(45deg, rgb(255, 226, 231), rgb(224, 255, 224));
+            background-size: 110vw;
+            min-height: 100vh;
+            margin-right: 0px;
+            padding: 21px;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            font-family: Poppins;
+        }
+
+        .edit {
+            border-radius: 10px;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2.8px);
+        }
+
+        .edit.close {
+            display: none;
+        }
+
+        .edit form {
+            position: absolute;
+            width: 70%;
+            min-height: 42%;
+            background-color: white;
+            box-shadow: 2px 2px 10px #00000049;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .edit form input {
+            width: 100%;
+            border-radius: 5px;
+            height: 28px;
+            margin-bottom: 10px
+        }
+
+        .edit form textarea {
+            box-shadow: 1px 1px 10px #00000050;
+        }
+
+        .edit .form.active {
+            z-index: 2;
+        }
+
+        .edit .nav-btns {
+            position: absolute;
+            right: 45px;
+            /* background-color: black; */
+            z-index: 5;
+            background-color: #00000020;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .edit .nav-btns .btn {
+            background-color: #00000050;
+            padding: 1px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .edit .nav-btns .btn:hover {
+            padding: 1.5px;
+        }
+
+        .edit .nav-btns .btn:active {
+            background-color: #00000030;
+        }
+        
+        .daycard {
+            position: relative;
+            min-width: 280px;
+            min-height: 280px;
+            border-radius: 10px;
+            box-shadow: 1px 1px 10px #00000030;
+            margin: 0px 17px 70px;
+            transform: rotateZ(-10deg);
+            background: white;
+            padding: 10px;
+        }
+
+        .daycard.right {
+            transform: rotateZ(10deg);
+            right: 0;
+        }
+
+        textarea {
+            border: 0;
+            width: 100%;
+            height: 150px;
+            /* background-color: black; */
+        }
+
+        .image {
+            width: 100%;
+            border-radius: 10%;
+        }
+
+        textarea::-webkit-resizer {
+            background-color: transparent
+        }
+
+        .settings {
+            width: 100%;
+            text-align: right;
+            padding-right: 10px;
+            font-size: 21px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="{% url "logout" %}"><button type="button" style="position: absolute; left: 10px; top: 10px; border: 1px solid #00000028; box-shadow: 1px 1px 10px #00000014; width: 50px; height: 30px; border-radius: 5px; padding: 3px; cursor: pointer;">Logout</button></a>
+    <div class="edit close">
+        <form action="{% url "journal" %}" method="post" class="form active">
+            {% csrf_token %}
+            <input type="text" value="update" style="display: none;" name="value">
+            <input type="text" class="id" name="id" placeholder="ID">
+            <textarea id="" class="body" name="body" placeholder="Body"></textarea>
+            <input type="text" class="image-link" name="link" placeholder="Image link">
+            <button type="submit">Update</button>
+        </form>
+        <form action="{% url "journal" %}" method=
+        "post" class="form">
+        {% csrf_token %}    
+            <input type="text" value="new" style="display: none;" name="value">
+            <input type="text" class="id" name="id" placeholder="ID">
+            <textarea id="" class="body" name="body" placeholder="Body"></textarea>
+            <input type="text" class="image-link" name="link" placeholder="Image link">
+            <button type="submit">New</button>
+        </form>
+        <div class="nav-btns">
+            <p class="btn close" style="text-align: center;">❌</p>
+            <p class="btn upt">U</p>
+            <p class="btn new">N</p>
+        </div>
+    </div>
+    <div class="cards">
+        {% for log in logs %}
+        {% if log.no|divisibleby:2 == False %}
+            <div class="daycard left">
+                <p class="title">{{log.ID}}</p>
+                <textarea contenteditable="false" class="body">{{log.log}}</textarea>
+                <img src="{{log.link}}" alt="" class="image">
+                <div class="settings">:</div>
+            </div>
+        {% else %}
+            <div class="daycard right">
+                <p class="title">{{log.ID}}</p>
+                <textarea contenteditable="false" class="body">{{log.log}}</textarea>
+                <img src="{{log.link}}" alt="" class="image">
+                <div class="settings">:</div>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>
+        let editbtns = document.querySelectorAll(".settings");
+        let editbox = document.querySelector(".edit");
+        let editmenu = document.querySelectorAll(".form")
+        let id = document.querySelector(".form .id")
+        let log = document.querySelector(".form .body")
+        let link = document.querySelector(".form .image-link")
+        let cancelbtn = document.querySelector(".btn.close")
+        let Ubtn = document.querySelector(".btn.upt")
+        let Nbtn = document.querySelector(".btn.new")
+
+        editbtns.forEach((editbtn, i) => {
+            editbtn.onclick = () => {
+                editbox.classList.remove("close");
+                id.value = document.querySelector(".daycard .title").textContent
+                log.value = document.querySelector(".daycard .body").value
+                link.value = document.querySelector(".daycard .image").src
+            }
+        })
+
+        Ubtn.onclick = () => {
+            console.log(editmenu[0]);
+            
+            editmenu[0].classList.add("active")
+            editmenu[1].classList.remove("active")
+        }
+
+        Nbtn.onclick = () => {
+            editmenu[1].classList.add("active")
+            editmenu[0].classList.remove("active")
+        }
+
+        cancelbtn.onclick = () => {
+            editbox.classList.add("close");
+        }
+
+    </script>
+</body>
+</html>

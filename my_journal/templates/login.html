@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Hind+Madurai:wght@300;400;500;600;700&family=Poppins:ital,wght@0,400;1,900&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Share+Tech&display=swap');
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 97.5vh;
+      font-family: Poppins;
+      background: linear-gradient(45deg, rgb(255, 226, 231), rgb(224, 255, 224));
+    }
+
+    .loginbox {
+      min-width: 280px;
+      min-height: 280px;
+      /* background-color: gray; */
+      border-radius: 10px;
+      padding: 7px;
+      box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.527);
+    }
+
+    .loginbox h2 {
+      width: 100%;
+      text-align: center;
+      text-decoration: underline;
+      margin-bottom: 30px;
+    }
+
+    .loginbox form .log {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .loginbox form input {
+      width: 170px;
+      height: 28px;
+      border-radius: 5px;
+      
+    }
+
+    .loginbox form input:placeholder-shown {
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .loginbox form .button {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .loginbox form button {
+      background-color: #fff;
+      border-radius: 5px;
+      width: 63px;
+      height: 30px;
+      cursor: pointer;
+      transition: .5s;
+    }
+
+    .loginbox form button:hover {
+      background-color: #d8d8d8;
+    }
+
+    .loginbox form button:active {
+      background-color: #aaaaaa;
+    }
+    
+    .message {
+      position: absolute;
+      top: 21px;
+      background-color: #f7f7f7;
+      box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.247);
+      padding: 21px;
+      transform: translateY(-140px);
+      animation: slideDown 1s ease-in-out 1 forwards;
+    }
+
+    @keyframes slideDown {
+      50% {
+        transform: translateY(14px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  {% if messages %}
+    {% for message in messages %}
+      <p class="message">{{message}}</p>
+    {% endfor %}
+  {% endif %}
+
+  <div class="loginbox">
+    <h2>Login</h2>
+    <form action="{% url "login" %}" method="post">
+      {% csrf_token %}
+      <div class="log">
+
+        <div class="input">
+           <!-- <label for="username">Username:</label> -->
+           <input type="text" id="username" name="username" placeholder="username" required><br><br>
+           <!-- <label for="password">Password:</label> -->
+           <input type="password" id="password" name="password" placeholder="password" required>
+           {% if msg != "None" %}
+           <p style="color: red;">{{msg}}</p>
+           {% endif %}
+         </div>
+      </div>
+      <br>
+      <br>
+      <div class="button"><button type="submit">Login</button></div>
+    </form>
+  </div>
+</body>
+</html>

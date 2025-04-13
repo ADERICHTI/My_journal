@@ -35,11 +35,8 @@ def MDB(id, Data):
 
     data = firebaseDB.readDB()
     if data:
-        if data[id] not in data:
-            data[id] = Data
-        else:
-            Data["no"] = len(RDB())+1
-            data[id] = Data
+        Data["no"] = len(RDB())+1
+        data[id] = Data
         firebaseDB.updateDB(data)
     else:
         Data["no"] = 1

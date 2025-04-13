@@ -32,17 +32,24 @@ class database:
     
 
 def MDB(id, Data):
+
     data = firebaseDB.readDB()
-    data[id] = Data
-    firebaseDB.updateDB(data)
+    if not isinstance(data, dict):
+        if data[id] not in data:
+            data[id] = Data
+        else:
+            Data["no"] = len(RDB())+1
+            data[id] = Data
+        firebaseDB.updateDB(data)
+    else:
+        Data["no"] = 1
+        firebaseDB.updateDB({id:Data})
 
 
 def RDB():
     data = firebaseDB.readDB()
     hashmap = {}
     for ind, i in enumerate(data):
-        if isinstance(data[i], dict):
-            data[i]["no"] = ind+1
         hashmap[i] =  data[i]
     return hashmap
 
@@ -69,10 +76,11 @@ def Logout(request):
 def home(request):
 
     data = RDB()
+    logs = []
+    if data:
+        db = database(data)
 
-    db = database(data)
-
-    logs = db.all()
+        logs = db.all()
 
     return render(request, 'index.html', {"logs": logs})
 

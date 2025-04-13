@@ -76,7 +76,7 @@ def Logout(request):
 def home(request):
 
     data = RDB()
-    logs = []
+    logs = ["None"]
     if data:
         db = database(data)
 

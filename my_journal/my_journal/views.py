@@ -34,7 +34,7 @@ class database:
 def MDB(id, Data):
 
     data = firebaseDB.readDB()
-    if not isinstance(data, dict):
+    if data:
         if data[id] not in data:
             data[id] = Data
         else:

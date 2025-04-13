@@ -163,6 +163,13 @@
                 <img src="{{log.link}}" alt="" class="image">
                 <div class="settings">:</div>
             </div>
+        {% elif log == "None" %}
+            <div class="daycard left">
+                <p class="title"></p>
+                <textarea contenteditable="false" class="body"></textarea>
+                <img src="" alt="" class="image">
+                <div class="settings">:</div>
+            </div>
         {% else %}
             <div class="daycard right">
                 <p class="title">{{log.ID}}</p>
